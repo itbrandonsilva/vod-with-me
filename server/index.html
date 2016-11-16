@@ -1,0 +1,25 @@
+<script src="/node_modules/socket.io-client/socket.io.js"></script>
+<script>
+  var socket1 = io('http://192.168.1.6:3000');
+  socket1.on('connect', function () {
+    socket1.emit('create');
+    socket1.on('id', id => window.iD = id);
+    setInterval(() => {
+        socket1.emit('CMD_PAUSE');
+    }, 1000);
+  });
+
+    setTimeout(() => {
+        var socket2 = io('http://192.168.1.6:3000');
+        socket2.on('connect', function () {
+            socket2.emit('join', window.iD);
+            socket2.on('CMD_PAUSE', () => {
+                console.log("PAUSING");
+            });
+        });
+    }, 5000);
+  //socket.on('news', function (data) {
+    //console.log(data);
+    //socket.emit('my other event', { my: 'data' });
+  //});
+</script>
